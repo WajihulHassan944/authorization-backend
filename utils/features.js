@@ -13,6 +13,7 @@ export const sendCookie = (user, res, message, statusCode = 200) => {
       httpOnly: true,
       maxAge: 15 * 60 * 1000,
       sameSite: isDev ? "lax" : "none",
+     domain: ".authorization-assessment-frontend.vercel.app",
       secure: isDev ? false : true,
     })
     .json({
