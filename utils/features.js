@@ -14,7 +14,7 @@ export const sendCookie = (user, res, message, statusCode = 200) => {
       httpOnly: true,
       maxAge: 15 * 60 * 1000,
       sameSite: isDev ? "lax" : "none",
-      secure: isDev ? false : true,
+      secure: isDev ? false : false,
     })
     .json({
       success: true,
