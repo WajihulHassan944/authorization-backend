@@ -77,7 +77,37 @@ export const login = async (req, res) => {
     });
   }
 };
-export const logout = async (req, res) => {
-  res.clearCookie("token");
-  res.json({ success: true, message: "Logged out successfully" });
+export const logout = (req, res) => {
+  const nodeEnv = process.env.NODE_ENV?.toLowerCase(); // normalize
+  const isDev = nodeEnv === "development";
+
+  const sameSite = isDev ? "lax" : "none";
+  const secure = isDev ? false : true;
+  const currentToken = req.cookies?.token;
+
+  console.log("=== Logout Debug Info ===");
+  console.log("NODE_ENV:", nodeEnv);
+  console.log("isDev:", isDev);
+  console.log("SameSite:", sameSite);
+  console.log("Secure:", secure);
+  console.log("Current token cookie (if any):", currentToken);
+
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+      sameSite,
+      secure,
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message: "Logged out successfully",
+      debug: {
+        NODE_ENV: nodeEnv,
+        sameSite,
+        secure,
+        receivedToken: currentToken,
+      },
+    });
 };
