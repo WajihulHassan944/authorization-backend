@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 
 export const sendCookie = (user, res, message, statusCode = 200) => {
-  // Use `user.id` since your API returns `id`, not `_id`
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
     expiresIn: "15m",
   });
@@ -14,7 +13,7 @@ export const sendCookie = (user, res, message, statusCode = 200) => {
       httpOnly: true,
       maxAge: 15 * 60 * 1000,
       sameSite: isDev ? "lax" : "none",
-      secure: isDev ? false : false,
+      secure: isDev ? false : true,
     })
     .json({
       success: true,
