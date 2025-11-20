@@ -4,8 +4,6 @@ import { dbQuery } from "../data/dbQuery.js";
 export const isAuthenticated = async (req, res, next) => {
   const { token } = req.cookies;
 
-  console.log("Middleware received token:", token);
-
   if (!token) {
     return res.status(401).json({
       success: false,
@@ -16,6 +14,7 @@ export const isAuthenticated = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    // Get user from DB
     const users = await dbQuery("SELECT id, email FROM users WHERE id = ?", [
       decoded.id,
     ]);
@@ -30,7 +29,7 @@ export const isAuthenticated = async (req, res, next) => {
     req.user = users[0];
     next();
   } catch (err) {
-    console.log("JWT error:", err);
+    console.log(err);
     return res.status(401).json({
       success: false,
       message: "Invalid or expired token",
