@@ -1,5 +1,4 @@
 import mysql from "mysql2/promise";
-import fs from "fs";
 import dotenv from "dotenv";
 import { dbQuery } from "./dbQuery.js";
 dotenv.config();
@@ -18,7 +17,7 @@ export const connectDB = async () => {
       connectionLimit: 10,
       queueLimit: 0,
       ssl: {
-        ca: fs.readFileSync("./aiven-ca.pem"), 
+        ca: process.env.MYSQL_SSL_CA, 
       },
     });
 
@@ -97,5 +96,3 @@ const createUsersTable = async () => {
 //   `);
 
 // };
-
-
